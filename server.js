@@ -1,6 +1,5 @@
 import express from "express";
 import cors from "cors";
-import { PrismaClient } from "@prisma/client";
 import bodyParser from "body-parser";
 import 'dotenv/config'
 import dataSheetRoute from "./routes/dataSheet.js";

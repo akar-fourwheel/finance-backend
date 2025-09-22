@@ -6,8 +6,8 @@ const initialFetch = async (req, res) => {
         const rows = await pool.query(query);
         const result = rows[0].map(row => Object.values(row));
 
-        console.log(result);
-        res.send(result.flat());
+        console.log("inital fetch",result);
+        res.send(result);
 
     }
     catch (e) {

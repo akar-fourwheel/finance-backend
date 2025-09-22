@@ -1,0 +1,33 @@
+import pool from "../../config/db.js";
+
+const schemeController = async (req, res) => {
+
+    const { model, bank, tenure} = req.query;
+
+    let query;
+    let rows;
+    try {
+        if (model && !bank && !tenure ) {
+            query = `select DISTINCT Bank FROM Data_Feed WHERE model = ?`;
+            rows = await pool.query(query, [model]);
+        }
+
+        if (model && bank && !tenure ) {
+            query = `select DISTINCT Tenure FROM Data_Feed WHERE model = ? AND Bank= ?`;
+            rows = await pool.query(query, [model, bank]);
+        }
+
+        if (model && bank && tenure) {
+            query = `select on_road_price, loan_amount, cashback,cashback_cap, customer_cashback, effective_price , roi , emi_with_roi ,total_outgoing FROM Data_Feed WHERE model = ? AND bank = ? AND tenure= ?`;
+            rows = await pool.query(query, [model, bank, tenure]);
+        }
+        const result = rows[0].map(row => Object.values(row));
+        res.send(result)
+    }
+    catch (e) {
+        console.log("data not found", e);
+        res.send("data not found")
+    }
+}
+
+export default schemeController;
