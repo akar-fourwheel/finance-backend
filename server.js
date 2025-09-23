@@ -3,12 +3,14 @@ import cors from "cors";
 import bodyParser from "body-parser";
 import 'dotenv/config'
 import dataSheetRoute from "./routes/dataSheet.js";
+import corsOptions from './config/corsOptions.js';
 
 const app = express();
 const PORT = process.env.PORT || 5000;
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(cors(corsOptions))
 
 
 app.get('/', (req, res) => {
