@@ -6,8 +6,10 @@ import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const createPool = () => {
-    return mysql.createPool({
+const caCert = await fs.readFile(path.join(__dirname, '../certs/ca.pem'));
+
+
+const pool = mysql.createPool({
         host: process.env.DB_HOST || 'localhost',
         user: process.env.DB_USER || 'root',
         password: process.env.DB_PASSWORD || 'root',
@@ -16,13 +18,16 @@ const createPool = () => {
         waitForConnections: true,
         connectionLimit: 10,
         queueLimit: 0,
-        multipleStatements: true
+        multipleStatements: true,
+        ssl: {
+            ca: caCert
+        }
     });
-};
+
 
 export const initDB = async () => {
     try {
-        const schemaPath = path.join(__dirname, '../models/Schema.sql');
+        const schemaPath = path.join(__dirname, '../Schema.sql');
         const schema = await fs.readFile(schemaPath, 'utf8');
         const connection = await pool.getConnection();
         await connection.query(schema);
@@ -33,6 +38,5 @@ export const initDB = async () => {
     }
 };
 
-const pool = createPool();
 
 export default pool; 

@@ -8,17 +8,17 @@ const schemeController = async (req, res) => {
     let rows;
     try {
         if (model && !bank && !tenure ) {
-            query = `select DISTINCT bank FROM Data_Feed WHERE model = ?`;
+            query = `select DISTINCT bank FROM data_feed WHERE model = ?`;
             [rows] = await pool.query(query, [model]);
         }
 
         if (model && bank && !tenure ) {
-            query = `select DISTINCT tenure FROM Data_Feed WHERE model = ? AND bank= ?`;
+            query = `select DISTINCT tenure FROM data_feed WHERE model = ? AND bank= ?`;
             [rows] = await pool.query(query, [model, bank]);
         }
 
         if (model && bank && tenure) {
-            query = `select on_road_price, loan_amount, cashback,cashback_cap, customer_cashback, effective_price , roi , emi_with_roi ,total_outgoing FROM Data_Feed WHERE model = ? AND bank = ? AND tenure= ?`;
+            query = `select on_road_price, loan_amount, cashback,cashback_cap, customer_cashback, effective_price , roi , emi_with_roi ,total_outgoing FROM data_feed WHERE model = ? AND bank = ? AND tenure= ?`;
             [rows] = await pool.query(query, [model, bank, tenure]);
         }
         res.json(rows);
