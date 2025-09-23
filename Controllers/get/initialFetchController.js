@@ -2,12 +2,10 @@ import pool from "../../config/db.js";
 
 const initialFetch = async (req, res) => {
     try {
-        const query = `SELECT DISTINCT Model FROM Data_Feed`;
-        const rows = await pool.query(query);
-        const result = rows[0].map(row => Object.values(row));
+        const query = `SELECT DISTINCT model FROM Data_Feed`;
+        const [rows] = await pool.query(query);
 
-        console.log("inital fetch",result);
-        res.send(result);
+        res.json(rows);
 
     }
     catch (e) {
