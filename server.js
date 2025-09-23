@@ -4,6 +4,7 @@ import bodyParser from "body-parser";
 import 'dotenv/config'
 import dataSheetRoute from "./routes/dataSheet.js";
 import corsOptions from './config/corsOptions.js';
+import { initDB } from './config/db.js'
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -22,4 +23,8 @@ app.get('/', (req, res) => {
 
 app.use('/', dataSheetRoute);
 
-app.listen(PORT, () => console.log(`Backend running on http://localhost:${PORT}`));
+initDB().then(()=>{
+    app.listen(PORT, () => console.log(`Backend running on http://localhost:${PORT}`));
+}).catch((err)=>{
+    console.log("Failed to initialize DB",err)
+})
